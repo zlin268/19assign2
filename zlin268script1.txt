@@ -1,0 +1,15 @@
+SHOW DATABASES;
+DROP DATABASE IF EXISTS zlin268assign2db;
+CREATE DATABASE zlin268assign2db;
+USE zlin268assign2db;
+GRANT USAGE ON *.* TO 'ta'@'localhost';
+DROP USER 'ta'@'localhost';
+CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319';
+GRANT ALL PRIVILEGES ON zlin268assign2db.* TO 'ta'@'localhost';
+FLUSH PRIVILEGES;
+SHOW TABLES;
+CREATE TABLE doctor(licensenumber CHAR(4),firstname VARCHAR(20), lastname VARCHAR(20), licensedate date, specialty VARCHAR(30),hospitalcode CHAR(3), PRIMARY KEY(licensenumber));
+CREATE TABLE hospital(hospitalcode CHAR(3), hospitalname VARCHAR(20), numberofbed CHAR(4), city VARCHAR(20), province VARCHAR(20), becomeheaddate date, licensenumber CHAR(4), PRIMARY KEY(hospitalcode),FOREIGN KEY(licensenumber) REFERENCES doctor(licensenumber) ON DELETE SET NULL);
+ALTER TABLE doctor ADD FOREIGN KEY(hospitalcode) REFERENCES hospital(hospitalcode);
+CREATE TABLE patient(OHIPnumber CHAR(9), firstname VARCHAR(20), lastname VARCHAR(20), PRIMARY KEY(OHIPnumber));
+CREATE TABLE treats(licensenumber CHAR(4),OHIPNumber CHAR(9), FOREIGN KEY(OHIPnumber) REFERENCES patient(OHIPnumber) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY (licensenumber) REFERENCES doctor(licensenumber) ON DELETE RESTRICT ON UPDATE CASCADE, PRIMARY KEY(OHIPnumber, licensenumber));

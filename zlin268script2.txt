@@ -1,0 +1,57 @@
+USE zlin268assign2db;
+SELECT * FROM PATIENT;
+LOAD DATA LOCAL INFILE 'loaddatafall2019.txt' INTO TABLE patient FIELDS TERMINATED BY ',';
+
+SELECT * FROM patient;
+INSERT IGNORE patient VALUES('999999999','Lin','Zimin');
+SELECT * FROM patient;
+
+SELECT * FROM doctor;
+INSERT INTO doctor (licensenumber, firstname, lastname, specialty, licensedate) VALUES ('RD34','Bernie','Kavorikian','Urologist','1980-09-');
+INSERT INTO doctor (licensenumber, firstname, lastname, specialty, licensedate) VALUES ('GD56','Joey','Shabado','Podiatrist','1960-06-24');
+INSERT INTO doctor (licensenumber, firstname, lastname, specialty, licensedate) VALUES ('HT45','Ross','Clooney','Surgeon ','1987-06-20');
+INSERT INTO doctor (licensenumber, firstname, lastname, specialty, licensedate) VALUES ('YT67','Ben ','Spock','Pediatrician ','1955-02-20');
+INSERT INTO doctor (licensenumber, firstname, lastname, specialty, licensedate) VALUES ('JK78','Mandy ','Webster','Surgeon  ','1990-08-08');
+INSERT INTO doctor (licensenumber, firstname, lastname, specialty, licensedate) VALUES ('SE66','Colleen','Aziz','Surgeon  ','1989-08-24');
+INSERT INTO doctor (licensenumber, firstname, lastname, specialty, licensedate) VALUES ('AE89','Strange','Lin','Surgeon ','1998-10-06');
+SELECT * FROM doctor;
+
+SELECT * FROM hospital;
+INSET INTO hospital (hospitalcode, hospitalname, city, province,numberofbed, becomeheaddate, licensenumber)VALUES('BBC','Joseph','London','On','1000','1999-09-10','GD56');
+INSET INTO hospital (hospitalcode, hospitalname, city, province,numberofbed, becomeheaddate, licensenumber)VALUES('ABC','Victoria','London','On','1600 ','1994-12-05','SE66');
+INSET INTO hospital (hospitalcode, hospitalname, city, province,numberofbed, becomeheaddate, licensenumber)VALUES('DDE','Victoria','Victoria','BC','1200  ','1997-12-07','YT67');
+SELECT * FROM hospital;
+
+SELECT * FROM treats;
+INSERT INTO treats VALUES ('GD56','110112113');
+INSERT INTO treats VALUES ('HT45','444555666');
+INSERT INTO treats VALUES ('JK78','444555666');
+INSERT INTO treats VALUES ('SE66','111222333');
+INSERT INTO treats VALUES ('YT67','111222333');
+INSERT INTO treats VALUES ('JK78','111222333');
+INSERT INTO treats VALUES ('GD56','333444555');
+INSERT INTO treats VALUES ('YT67','667766777');
+INSERT INTO treats VALUES ('JK78','667766777');
+INSERT INTO treats VALUES ('GD56','667766777');
+INSERT INTO treats VALUES ('YT67','111222111');
+INSERT INTO treats VALUES ('AE89','999999999');
+SELECT * FROM treats;
+
+SELECT * FROM doctor;
+UPDATE doctor SET hospitalcode = 'BBC' WHERE licensenumber = 'RD34';
+UPDATE doctor SET hospitalcode = 'BBC' WHERE licensenumber = 'GD56';
+UPDATE doctor SET hospitalcode = 'DDE' WHERE licensenumber = 'HT45';
+UPDATE doctor SET hospitalcode = 'DDE' WHERE licensenumber = 'YT67';
+UPDATE doctor SET hospitalcode = 'BBC' WHERE licensenumber = 'JK78';
+UPDATE doctor SET hospitalcode = 'ABC' WHERE licensenumber = 'SE66';
+UPDATE doctor SET hospitalcode = 'ABC' WHERE licensenumber = 'AE89';
+SELECT * FROM doctor;
+
+SELECT * FROM patient;
+UPDATE patient SET lastname= 'Brown' WHERE OHIPnumber = '111222111';
+SELECT * FROM patient;
+
+SELECT * FROM treats;
+UPDATE treats SET licensenumber = (SELECT licensenumber FROM doctor WHERE lastname = 'Clooney')WHERE licensenumber = (SELECT licensenumber FROM doctor WHERE lastname = 'Spock');
+SELECT * FROM treats;
+

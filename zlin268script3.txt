@@ -1,0 +1,21 @@
+USE zlin268assign2db;
+SELECT lastname FROM patient;
+SELECT DISTINCT lastname From patient;
+SELECT * From doctor ORDER BY doctor.lastname;
+SELECT hospitalname, hospitalcode From hospital WHERE numberofbed>1500;
+SELECT firstname, lastname FROM doctor WHERE hospitalcode IN(SELECT hospitalcode From hospital WHERE hospitalname='St.Joseph');
+SELECT firstname, lastname FROM patient WHERE lastname LIKE "G%";
+SELECT a.firstname, a.lastname From patient AS a WHERE OHIPnumber (SELECT OHIPnumber FROM treats WHERE licensenumber IN (SELECT licensenumber FROM doctor WHERE doctor.lastname = 'Clooney'));
+SELECT hospitalname, city, doctor.lastname From hospital, doctor WHERE (	hospital.licensenumber = doctor.licensenumber;											) 
+SELECT SUM(numberofbed) AS 'Total Number of beds' From hospital;
+SELECT patient.firstname, doctor.firstname
+    FROM patient
+        INNER JOIN treats ON patient.OHIPnumber = treats.OHIPnumber
+        INNER JOIN doctor ON treats.licensenumber = doctor.licensenumber
+    WHERE doctor.licensenum IN (SELECT licensenum FROM hospital);
+SELECT doctor.lastname, doctor.firstname 
+	FROM doctor 
+	WHERE (hospitalcode IN (SELECT hospitalcode FROM hospital WHERE name = 'Victoria')) 
+	AND (doctor.specialty = 'Surgeon');
+SELECT doctor.firstname FROM doctor WHERE doctor.licensenumber NOT IN (SELECT licensenumber FROM treats);
+SELECT doctor.lastname, doctor.firstname FROM doctor INNER JOIN treats ON doctor.licensenumber = treats.licensenum INNER JOIN patient ON treats.OHIPnumber = patient.OHIPnumber GROUP BY doctor.licensenumber HAVING COUNT(doctor.licensenumber)>1;
