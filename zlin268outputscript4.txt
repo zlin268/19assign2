@@ -1,0 +1,124 @@
+Warning: Using a password on the command line interface can be insecure.
+--------------
+DELETE FROM doctor WHERE licensedate <1965-01-01
+--------------
+
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+ERROR 1050 (42S01) at line 5: Table 'vw' already exists
+--------------
+CREATE VIEW vw AS SELECT patient.firstname, patient.lastname AS patientlastname, doctor.lastname AS doctorlastname, hospital.hospitalname FROM patient INNER JOIN treats ON patient.OHIPnumber = treats.OHIPnumber INNER JOIN doctor ON treats.licensenumber = doctor.licensenumber INNER JOIN hospital ON doctor.licensenumber = hospital.licensenumber WHERE hospital.becomeheaddate >1995-12-31
+--------------
+
+--------------
+SELECT * FROM vw
+--------------
+
+Empty set, 1 warning (0.00 sec)
+
+--------------
+SELECT * FROM doctor
+--------------
+
++---------------+-----------+------------+-------------+---------------+--------------+
+| licensenumber | firstname | lastname   | licensedate | specialty     | hospitalcode |
++---------------+-----------+------------+-------------+---------------+--------------+
+| AE89          | Strange   | Lin        | 1998-10-06  | Surgeon       | ABC          |
+| GD56          | Joey      | Shabado    | 1960-06-24  | Podiatrist    | BBC          |
+| HT45          | Ross      | Clooney    | 1987-06-20  | Surgeon       | DDE          |
+| JK78          | Mandy     | Webster    | 1990-08-08  | Surgeon       | BBC          |
+| RD34          | Bernie    | Kavorikian | 1980-09-09  | Urologist     | BBC          |
+| SE66          | Colleen   | Aziz       | 1989-08-24  | Surgeon       | ABC          |
+| YT67          | Ben       | Spock      | 1955-02-20  | Pediatrician  | DDE          |
++---------------+-----------+------------+-------------+---------------+--------------+
+7 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM treats
+--------------
+
++---------------+------------+
+| licensenumber | OHIPNumber |
++---------------+------------+
+| AE89          | 999999999  |
+| GD56          | 110112113  |
+| GD56          | 333444555  |
+| GD56          | 667766777  |
+| HT45          | 111222111  |
+| HT45          | 111222333  |
+| HT45          | 444555666  |
+| HT45          | 667766777  |
+| JK78          | 111222333  |
+| JK78          | 444555666  |
+| JK78          | 667766777  |
+| SE66          | 111222333  |
++---------------+------------+
+12 rows in set (0.00 sec)
+
+ERROR 1451 (23000) at line 10: Cannot delete or update a parent row: a foreign key constraint fails (`zlin268assign2db`.`treats`, CONSTRAINT `treats_ibfk_2` FOREIGN KEY (`licensenumber`) REFERENCES `doctor` (`licensenumber`) ON UPDATE CASCADE)
+--------------
+DELETE FROM doctor WHERE lastname = 'Clooney'
+--------------
+
+--------------
+SELECT * FROM doctor
+--------------
+
++---------------+-----------+------------+-------------+---------------+--------------+
+| licensenumber | firstname | lastname   | licensedate | specialty     | hospitalcode |
++---------------+-----------+------------+-------------+---------------+--------------+
+| AE89          | Strange   | Lin        | 1998-10-06  | Surgeon       | ABC          |
+| GD56          | Joey      | Shabado    | 1960-06-24  | Podiatrist    | BBC          |
+| HT45          | Ross      | Clooney    | 1987-06-20  | Surgeon       | DDE          |
+| JK78          | Mandy     | Webster    | 1990-08-08  | Surgeon       | BBC          |
+| RD34          | Bernie    | Kavorikian | 1980-09-09  | Urologist     | BBC          |
+| SE66          | Colleen   | Aziz       | 1989-08-24  | Surgeon       | ABC          |
+| YT67          | Ben       | Spock      | 1955-02-20  | Pediatrician  | DDE          |
++---------------+-----------+------------+-------------+---------------+--------------+
+7 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM treats
+--------------
+
++---------------+------------+
+| licensenumber | OHIPNumber |
++---------------+------------+
+| AE89          | 999999999  |
+| GD56          | 110112113  |
+| GD56          | 333444555  |
+| GD56          | 667766777  |
+| HT45          | 111222111  |
+| HT45          | 111222333  |
+| HT45          | 444555666  |
+| HT45          | 667766777  |
+| JK78          | 111222333  |
+| JK78          | 444555666  |
+| JK78          | 667766777  |
+| SE66          | 111222333  |
++---------------+------------+
+12 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM doctor
+--------------
+
++---------------+-----------+------------+-------------+---------------+--------------+
+| licensenumber | firstname | lastname   | licensedate | specialty     | hospitalcode |
++---------------+-----------+------------+-------------+---------------+--------------+
+| AE89          | Strange   | Lin        | 1998-10-06  | Surgeon       | ABC          |
+| GD56          | Joey      | Shabado    | 1960-06-24  | Podiatrist    | BBC          |
+| HT45          | Ross      | Clooney    | 1987-06-20  | Surgeon       | DDE          |
+| JK78          | Mandy     | Webster    | 1990-08-08  | Surgeon       | BBC          |
+| RD34          | Bernie    | Kavorikian | 1980-09-09  | Urologist     | BBC          |
+| SE66          | Colleen   | Aziz       | 1989-08-24  | Surgeon       | ABC          |
+| YT67          | Ben       | Spock      | 1955-02-20  | Pediatrician  | DDE          |
++---------------+-----------+------------+-------------+---------------+--------------+
+7 rows in set (0.00 sec)
+
+ERROR 1451 (23000) at line 14: Cannot delete or update a parent row: a foreign key constraint fails (`zlin268assign2db`.`treats`, CONSTRAINT `treats_ibfk_2` FOREIGN KEY (`licensenumber`) REFERENCES `doctor` (`licensenumber`) ON UPDATE CASCADE)
+--------------
+DELETE FROM doctor WHERE specialty = 'Surgeon'
+--------------
+
+Bye
