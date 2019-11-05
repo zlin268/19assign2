@@ -1,0 +1,133 @@
+Warning: Using a password on the command line interface can be insecure.
+--------------
+SELECT lastname FROM patient
+--------------
+
++----------+
+| lastname |
++----------+
+| Gellar   |
+| Brown    |
+| Green    |
+| Gellar   |
+| Gellar   |
+| Bing     |
+| Zimin    |
++----------+
+7 rows in set (0.00 sec)
+
+--------------
+SELECT DISTINCT lastname From patient
+--------------
+
++----------+
+| lastname |
++----------+
+| Gellar   |
+| Brown    |
+| Green    |
+| Bing     |
+| Zimin    |
++----------+
+5 rows in set (0.00 sec)
+
+--------------
+SELECT * From doctor ORDER BY doctor.lastname
+--------------
+
++---------------+-----------+------------+-------------+---------------+--------------+
+| licensenumber | firstname | lastname   | licensedate | specialty     | hospitalcode |
++---------------+-----------+------------+-------------+---------------+--------------+
+| SE66          | Colleen   | Aziz       | 1989-08-24  | Surgeon       | ABC          |
+| HT45          | Ross      | Clooney    | 1987-06-20  | Surgeon       | DDE          |
+| RD34          | Bernie    | Kavorikian | 1980-09-09  | Urologist     | BBC          |
+| AE89          | Strange   | Lin        | 1998-10-06  | Surgeon       | ABC          |
+| GD56          | Joey      | Shabado    | 1960-06-24  | Podiatrist    | BBC          |
+| YT67          | Ben       | Spock      | 1955-02-20  | Pediatrician  | DDE          |
+| JK78          | Mandy     | Webster    | 1990-08-08  | Surgeon       | BBC          |
++---------------+-----------+------------+-------------+---------------+--------------+
+7 rows in set (0.00 sec)
+
+--------------
+SELECT hospitalname, hospitalcode From hospital WHERE numberofbed>1500
+--------------
+
++--------------+--------------+
+| hospitalname | hospitalcode |
++--------------+--------------+
+| Victoria     | ABC          |
++--------------+--------------+
+1 row in set (0.00 sec)
+
+--------------
+SELECT firstname, lastname FROM doctor WHERE hospitalcode IN(SELECT hospitalcode From hospital WHERE hospitalname='St.Joseph')
+--------------
+
+Empty set (0.00 sec)
+
+--------------
+SELECT firstname, lastname FROM patient WHERE lastname LIKE "G%"
+--------------
+
++-----------+----------+
+| firstname | lastname |
++-----------+----------+
+| Bill      | Gellar   |
+| Jon       | Green    |
+| Colleen   | Gellar   |
+| Sean      | Gellar   |
++-----------+----------+
+4 rows in set (0.00 sec)
+
+ERROR 1064 (42000) at line 8: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SELECT OHIPnumber FROM treats WHERE licensenumber IN (SELECT licensenumber FROM ' at line 1
+ERROR 1064 (42000) at line 9: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+ERROR 1064 (42000) at line 9: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') 
+SELECT SUM(numberofbed) AS 'Total Number of beds' From hospital' at line 1
+ERROR 1054 (42S22) at line 11: Unknown column 'licensenum' in 'field list'
+ERROR 1054 (42S22) at line 16: Unknown column 'name' in 'where clause'
+--------------
+SELECT a.firstname, a.lastname From patient AS a WHERE OHIPnumber (SELECT OHIPnumber FROM treats WHERE licensenumber IN (SELECT licensenumber FROM doctor WHERE doctor.lastname = 'Clooney'))
+--------------
+
+--------------
+SELECT hospitalname, city, doctor.lastname From hospital, doctor WHERE (	hospital.licensenumber = doctor.licensenumber
+--------------
+
+--------------
+) 
+SELECT SUM(numberofbed) AS 'Total Number of beds' From hospital
+--------------
+
+--------------
+SELECT patient.firstname, doctor.firstname
+    FROM patient
+        INNER JOIN treats ON patient.OHIPnumber = treats.OHIPnumber
+        INNER JOIN doctor ON treats.licensenumber = doctor.licensenumber
+    WHERE doctor.licensenum IN (SELECT licensenum FROM hospital)
+--------------
+
+--------------
+SELECT doctor.lastname, doctor.firstname 
+	FROM doctor 
+	WHERE (hospitalcode IN (SELECT hospitalcode FROM hospital WHERE name = 'Victoria')) 
+	AND (doctor.specialty = 'Surgeon')
+--------------
+
+--------------
+SELECT doctor.firstname FROM doctor WHERE doctor.licensenumber NOT IN (SELECT licensenumber FROM treats)
+--------------
+
++-----------+
+| firstname |
++-----------+
+| Bernie    |
+| Ben       |
++-----------+
+2 rows in set (0.00 sec)
+
+ERROR 1054 (42S22) at line 21: Unknown column 'treats.licensenum' in 'on clause'
+--------------
+SELECT doctor.lastname, doctor.firstname FROM doctor INNER JOIN treats ON doctor.licensenumber = treats.licensenum INNER JOIN patient ON treats.OHIPnumber = patient.OHIPnumber GROUP BY doctor.licensenumber HAVING COUNT(doctor.licensenumber)>1
+--------------
+
+Bye
