@@ -1,0 +1,15 @@
+
+USE zlin268assign2db;
+DELETE FROM doctor WHERE licensedate <1965-01-01;
+
+CREATE VIEW vw AS SELECT patient.firstname, patient.lastname AS patientlastname, doctor.lastname AS doctorlastname, hospital.hospitalname FROM patient INNER JOIN treats ON patient.OHIPnumber = treats.OHIPnumber INNER JOIN doctor ON treats.licensenumber = doctor.licensenumber INNER JOIN hospital ON doctor.licensenumber = hospital.licensenumber WHERE hospital.becomeheaddate >1995-12-31;
+
+SELECT * FROM vw;
+SELECT * FROM doctor;
+SELECT * FROM treats;
+DELETE FROM doctor WHERE lastname = 'Clooney';
+SELECT * FROM doctor;
+SELECT * FROM treats;
+SELECT * FROM doctor;
+DELETE FROM doctor WHERE specialty = 'Surgeon';
+-- i am not sure but i think the constraint of treats is probabaly DELETE CASCADE. the row of treats has licensenumber auto deleted after the foreign key in treats deleted
